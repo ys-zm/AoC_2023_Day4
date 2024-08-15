@@ -16,7 +16,9 @@ def check_cards(file):
         # remove the title and strip white spaces
         trim_line = card[card.find(":") + 1:len(card)].strip()
 
-        split_line = trim_line.split('|')       
+        split_line = trim_line.split('|')
+        if len(split_line) != 2:
+            continue 
         winning_numbers = get_numbers(split_line[0])
         own_numbers = get_numbers(split_line[1])
         n_matches = count_matches(winning_numbers, own_numbers);
