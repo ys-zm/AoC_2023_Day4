@@ -1,9 +1,8 @@
-import argparse
 import sys
 
-# returns a list of ints
+# returns a list
 def get_numbers(line):
-    return [int(n) for n in line.split() if n.isdigit()]
+    return [n for n in line.split() if n]
 
 def count_matches(n1, n2):
     return len(set(n1) & set(n2))
