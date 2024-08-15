@@ -4,9 +4,6 @@ import sys
 def get_numbers(line):
     return [n for n in line.split() if n]
 
-def count_matches(n1, n2):
-    return len(set(n1) & set(n2))
-
 def check_cards(file):
     points = 0
     for card in file:
@@ -21,7 +18,7 @@ def check_cards(file):
             continue 
         winning_numbers = get_numbers(split_line[0])
         own_numbers = get_numbers(split_line[1])
-        n_matches = count_matches(winning_numbers, own_numbers);
+        n_matches = len(set(winning_numbers) & set(own_numbers))
         if n_matches:
             points += 2 ** (n_matches - 1) # 2^0 = 1, so we use n_matches - 1
     return points
