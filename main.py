@@ -1,54 +1,36 @@
 import argparse
 import sys
 
+# returns a list of ints
 def get_numbers(line):
-    # split at ' ' to separate numbers, returns a list of strings
-    split_numbers = line.split()
-    # initialize numbers list
-    numbers = []
-    for n in split_numbers:
-        try:
-            numbers.append(int(n)) # returns an exception if conversion fails
-        except ValueError:
-            print(f"Warning: Unable to convert '{n}' to integer.")
-    return numbers
+    return [int(n) for n in line.split() if n.isdigit()]
 
-
-def calc_matches(n1, n2):
-    matches = 0
-    # matches = sum(1 for item in list1 if item in list2)
-    for item in n1:
-        if item in n2:
-            matches += 1
-    return matches
+def count_matches(n1, n2):
+    return len(set(n1) & set(n2))
 
 def check_cards(file):
     points = 0
     for card in file:
+        # skip empty lines
+        if not card.strip():
+            continue 
         # remove the title and strip white spaces
         trim_line = card[card.find(":") + 1:len(card)].strip()
 
-        # split remainder at '|' char
-        split_line = trim_line.split('|')
-       
-       # store numbers into a list of ints
+        split_line = trim_line.split('|')       
         winning_numbers = get_numbers(split_line[0])
         own_numbers = get_numbers(split_line[1])
-        matches = calc_matches(winning_numbers, own_numbers);
-        if matches:
-            points = points + 2 ** (matches - 1) # 2^0 = 1, so we use len(matches) - 1
-    print("points: ", points)
-
-
+        n_matches = count_matches(winning_numbers, own_numbers);
+        if n_matches:
+            points += 2 ** (n_matches - 1) # 2^0 = 1, so we use n_matches - 1
+    return points
         
 def main(input_file):
     try:
         with open(input_file, 'r') as file:
-            check_cards(file)
-    except FileNotFoundError:
-        print(f"Error: The file '{input_file}' does not exist.")
+            print("Points:" , check_cards(file))
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"Error: {e}")
 
 # calling main function
 if __name__ == '__main__':
